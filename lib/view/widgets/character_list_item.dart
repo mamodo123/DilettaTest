@@ -128,7 +128,15 @@ class CharacterListItem extends StatelessWidget {
                   if (favorite) {
                     cubit.removeFavorite(character.id.toString());
                   } else {
-                    cubit.addFavorite(character.id.toString(), character: character);
+                    cubit.addFavorite(character.id.toString(),
+                        character: character, onError: (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Could not add to Wishlist  '),
+                          duration: Duration(seconds: 2), // Duração da Snackbar
+                        ),
+                      );
+                    });
                   }
                 },
                 icon: Icon(

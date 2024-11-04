@@ -31,9 +31,16 @@ class _BufferListState extends State<BufferList> {
     await loadPage();
     if (context.mounted) {
       final alreadyLoadedItems = context.read<BufferListCubit>().state;
-      await context
-          .read<FavoriteListCubit>()
-          .loadData(items: alreadyLoadedItems.characters);
+      await context.read<FavoriteListCubit>().loadData(
+          items: alreadyLoadedItems.characters,
+          onError: (e) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Could not load Wishlist'),
+                duration: Duration(seconds: 2), // Duração da Snackbar
+              ),
+            );
+          });
     }
   }
 
