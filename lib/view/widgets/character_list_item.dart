@@ -79,6 +79,19 @@ class CharacterListItem extends StatelessWidget {
                     height: 80,
                     width: 80,
                     fit: BoxFit.cover,
+                    errorBuilder: (BuildContext context, Object error,
+                        StackTrace? stackTrace) {
+                      return Container(
+                        height: 80,
+                        width: 80,
+                        color: Colors.grey[300],
+                        child: const Center(
+                          child: Icon(
+                            Icons.person,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
