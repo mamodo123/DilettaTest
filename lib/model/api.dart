@@ -1,13 +1,13 @@
 import 'character.dart';
 
-class ApiResponse {
+class ApiListResponse {
   final String url;
   final Info info;
   final List<Character>? results;
 
-  ApiResponse({required this.info, required this.results, required this.url});
+  ApiListResponse({required this.info, required this.results, required this.url});
 
-  ApiResponse.fromJson({required Map<String, dynamic> json, required this.url})
+  ApiListResponse.fromJson({required Map<String, dynamic> json, required this.url})
       : info = Info.fromJson(json: json['info'], page: Info.extractPage(url)),
         results = json['results'] == null
             ? null

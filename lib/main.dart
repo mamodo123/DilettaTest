@@ -1,13 +1,17 @@
+import 'package:dilleta_test/controller/favorite_list_cubit.dart';
 import 'package:dilleta_test/view/buffer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'controller/characters_cubit.dart';
+import 'controller/buffer_list_cubit.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: BlocProvider(
-      create: (_) => BufferListCubit(),
+    home: MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => BufferListCubit()),
+        BlocProvider(create: (_) => FavoriteListCubit()),
+      ],
       child: const HomeScreen(),
     ),
   ));

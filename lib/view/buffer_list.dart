@@ -1,8 +1,10 @@
+import 'package:dilleta_test/controller/favorite_list_cubit.dart';
+import 'package:dilleta_test/model/character.dart';
 import 'package:dilleta_test/view/widgets/character_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../controller/characters_cubit.dart';
+import '../controller/buffer_list_cubit.dart';
 import '../model/character_state.dart';
 
 class BufferList extends StatefulWidget {
@@ -25,11 +27,21 @@ class _BufferListState extends State<BufferList> {
     }
   }
 
+  Future<void> loadInitialData(BuildContext context) async {
+    await loadPage();
+    if (context.mounted) {
+      final alreadyLoadedItems = context.read<BufferListCubit>().state;
+      await context
+          .read<FavoriteListCubit>()
+          .loadData(items: alreadyLoadedItems.characters);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      loadPage();
+      loadInitialData(context);
     });
 
     _scrollController.addListener(() {
@@ -49,39 +61,44 @@ class _BufferListState extends State<BufferList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BufferListCubit, CharacterState>(
-      builder: (context, state) {
-        if (state.status == CharacterStatus.initial) {
-          return const Center(
-            child: Text('Loading items...'),
-          );
-        } else {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (state.characters.isNotEmpty)
-                Expanded(
-                  child: ListView.builder(
-                    controller: _scrollController,
-                    itemCount: state.characters.length,
-                    itemBuilder: (context, index) {
-                      final character = state.characters[index];
-                      return CharacterListItem(character);
-                    },
+    return BlocBuilder<FavoriteListCubit, Map<String, Character?>>(
+        builder: (context, favorites) {
+      return BlocBuilder<BufferListCubit, CharacterState>(
+        builder: (context, state) {
+          if (state.status == CharacterStatus.initial) {
+            return const Center(
+              child: Text('Loading items...'),
+            );
+          } else {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (state.characters.isNotEmpty)
+                  Expanded(
+                    child: ListView.builder(
+                      controller: _scrollController,
+                      itemCount: state.characters.length,
+                      itemBuilder: (context, index) {
+                        final character = state.characters[index];
+                        final favorite =
+                            favorites.containsKey(character.id.toString());
+                        return CharacterListItem(character, favorite);
+                      },
+                    ),
                   ),
-                ),
-              if (state.status == CharacterStatus.loading)
-                const Center(
-                  child: CircularProgressIndicator(),
-                ),
-              if (state.message != null)
-                Center(
-                  child: Text(state.message!),
-                ),
-            ],
-          );
-        }
-      },
-    );
+                if (state.status == CharacterStatus.loading)
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                if (state.message != null)
+                  Center(
+                    child: Text(state.message!),
+                  ),
+              ],
+            );
+          }
+        },
+      );
+    });
   }
 }

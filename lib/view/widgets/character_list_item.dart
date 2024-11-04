@@ -1,10 +1,14 @@
+import 'package:dilleta_test/controller/favorite_list_cubit.dart';
 import 'package:dilleta_test/model/character.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CharacterListItem extends StatelessWidget {
   final Character character;
 
-  const CharacterListItem(this.character, {super.key});
+  final bool favorite;
+
+  const CharacterListItem(this.character, this.favorite, {super.key});
 
   LinearGradient _getCardGradient(String status) {
     switch (status) {
@@ -88,11 +92,13 @@ class CharacterListItem extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .headlineSmall
-                          ?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+                          ?.copyWith(
+                              color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     Row(
                       children: [
-                        const Icon(Icons.location_on, color: Colors.white, size: 16),
+                        const Icon(Icons.location_on,
+                            color: Colors.white, size: 16),
                         const SizedBox(width: 4),
                         Expanded(
                           child: Text(
@@ -104,7 +110,8 @@ class CharacterListItem extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        const Icon(Icons.heart_broken, color: Colors.white, size: 16),
+                        const Icon(Icons.heart_broken,
+                            color: Colors.white, size: 16),
                         const SizedBox(width: 4),
                         Text(
                           'Status: ${character.status}',
@@ -116,9 +123,16 @@ class CharacterListItem extends StatelessWidget {
                 ),
               ),
               IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.favorite_outline_rounded,
+                onPressed: () {
+                  final cubit = context.read<FavoriteListCubit>();
+                  if (favorite) {
+                    cubit.removeFavorite(character.id.toString());
+                  } else {
+                    cubit.addFavorite(character.id.toString(), character: character);
+                  }
+                },
+                icon: Icon(
+                  favorite ? Icons.favorite : Icons.favorite_outline_rounded,
                   color: Colors.white,
                 ),
               ),

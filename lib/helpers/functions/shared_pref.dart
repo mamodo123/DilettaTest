@@ -8,7 +8,7 @@ Future<void> saveHashSet(HashSet<String> hashSet, String key) async {
   await prefs.setStringList(key, list);
 }
 
-Future<HashSet<String>?> loadHashSet(String key) async {
+Future<HashSet<String>?> getHashSet(String key) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   List<String>? list = prefs.getStringList(key);
   if (list == null) {
@@ -17,8 +17,21 @@ Future<HashSet<String>?> loadHashSet(String key) async {
   return HashSet<String>.from(list);
 }
 
-Future<void> addItem(String item, String key) async {
-  HashSet<String> hashSet = await loadHashSet(key) ?? HashSet();
-  hashSet.add(item);
+Future<bool> addItem(String item, String key) async {
+  HashSet<String> hashSet = await getHashSet(key) ?? HashSet();
+  bool added = hashSet.add(item);
   await saveHashSet(hashSet, key);
+  return added;
+}
+
+Future<bool> removeItem(String item, String key) async {
+  HashSet<String>? hashSet = await getHashSet(key);
+  if (hashSet != null) {
+    final removed = hashSet.remove(item);
+    if (removed) {
+      await saveHashSet(hashSet, key);
+      return removed;
+    }
+  }
+  return false;
 }

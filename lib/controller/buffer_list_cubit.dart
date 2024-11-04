@@ -7,10 +7,10 @@ import '../model/character_state.dart';
 class BufferListCubit extends Cubit<CharacterState> {
   BufferListCubit() : super(CharacterState.initial());
 
-  final Map<int, ApiResponse> pages = {};
+  final Map<int, ApiListResponse> pages = {};
   int? nextPage = 1;
 
-  Future<void> loadPage() async {
+  Future<CharacterState?> loadPage() async {
     if (nextPage != null) {
       emit(state.copyWith(status: CharacterStatus.loading));
 
@@ -28,6 +28,7 @@ class BufferListCubit extends Cubit<CharacterState> {
             status: CharacterStatus.loaded,
             characters: [...state.characters, ...response.results!],
           ));
+          return state;
         }
       } catch (error) {
         emit(state.copyWith(
@@ -37,5 +38,6 @@ class BufferListCubit extends Cubit<CharacterState> {
         ));
       }
     }
+    return null;
   }
 }
