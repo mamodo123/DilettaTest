@@ -4,8 +4,8 @@ import '../helpers/functions/api.dart';
 import '../model/api.dart';
 import '../model/character_state.dart';
 
-class CharactersCubit extends Cubit<CharacterState> {
-  CharactersCubit() : super(CharacterState.initial());
+class BufferListCubit extends Cubit<CharacterState> {
+  BufferListCubit() : super(CharacterState.initial());
 
   final Map<int, ApiResponse> pages = {};
   int? nextPage = 1;
@@ -33,7 +33,7 @@ class CharactersCubit extends Cubit<CharacterState> {
         emit(state.copyWith(
           characters: state.characters,
           status: CharacterStatus.error,
-          message: 'Error in load characters',
+          message: 'Error in load list items',
         ));
       }
     }

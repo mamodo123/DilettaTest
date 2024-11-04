@@ -1,4 +1,4 @@
-import 'package:dilleta_test/view/characters_list.dart';
+import 'package:dilleta_test/view/buffer_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -7,7 +7,7 @@ import 'controller/characters_cubit.dart';
 void main() {
   runApp(MaterialApp(
     home: BlocProvider(
-      create: (_) => CharactersCubit(),
+      create: (_) => BufferListCubit(),
       child: const HomeScreen(),
     ),
   ));
@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Rick and Morty characters'),
       ),
-      body: CharactersList(),
+      body: BufferList(),
     );
   }
 }

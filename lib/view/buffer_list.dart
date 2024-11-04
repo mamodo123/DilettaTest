@@ -5,21 +5,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../controller/characters_cubit.dart';
 import '../model/character_state.dart';
 
-class CharactersList extends StatefulWidget {
-  const CharactersList({super.key});
+class BufferList extends StatefulWidget {
+  const BufferList({super.key});
 
   @override
-  State<CharactersList> createState() => _CharactersListState();
+  State<BufferList> createState() => _BufferListState();
 }
 
-class _CharactersListState extends State<CharactersList> {
+class _BufferListState extends State<BufferList> {
   var _loading = false;
   final ScrollController _scrollController = ScrollController();
 
   Future<void> loadPage() async {
     _loading = true;
     try {
-      await context.read<CharactersCubit>().loadPage();
+      await context.read<BufferListCubit>().loadPage();
     } finally {
       _loading = false;
     }
@@ -49,7 +49,7 @@ class _CharactersListState extends State<CharactersList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CharactersCubit, CharacterState>(
+    return BlocBuilder<BufferListCubit, CharacterState>(
       builder: (context, state) {
         if (state.status == CharacterStatus.initial) {
           return const Center(
