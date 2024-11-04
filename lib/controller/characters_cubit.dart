@@ -33,7 +33,7 @@ class CharactersCubit extends Cubit<CharacterState> {
         emit(state.copyWith(
           characters: state.characters,
           status: CharacterStatus.error,
-          message: 'Erro ao carregar personagens',
+          message: 'Error in load characters',
         ));
       }
     }
