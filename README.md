@@ -1,16 +1,14 @@
-# dilleta_test
+# DilettaTest
 
-A new Flutter project.
+Desafio técnico - Flutter
 
-## Getting Started
+Desafio: Essa é uma vaga para desenvolvedor Flutter (Mobile), e pensamos em um teste simples para avaliar o desempenho na stack. A ideia desse desafio é criar uma aplicação de listagem de produtos.
 
-This project is a starting point for a Flutter application.
+Na escolha do backend também deixaremos livre, os dados podem ser adquiridos de uma API free, ou mesmo podem ser adicionados via https://mockapi.io/
 
-A few resources to get you started if this is your first Flutter project:
+Componentes: Faça a listagem como bem entender, traga os produtos do backend via API e crie uma wishlist baseada nessa lista de produtos. Basicamente é adicionar alguns produtos nessa lista de desejos. Você tem autonomia no design, pode colocar em duas telas, uma página à parte, você é o dono da aplicação.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Regras de Negócio: Cada usuário poderá criar sua própria wishlist. Você é livre para escolher qual gerenciador de estado prefere, adicione os filtros que achar pertinente para a manipulação da wishlist.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+A ideia será criar um pull request nesse repositório para ser avaliado.
+
