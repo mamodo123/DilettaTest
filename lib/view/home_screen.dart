@@ -1,7 +1,10 @@
 import 'package:dilleta_test/view/wish_list.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../controller/favorite_list_cubit.dart';
 import '../helpers/consts/config.dart';
+import '../model/character.dart';
 import 'buffer_list.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,13 +39,25 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
         onTap: _onTabTapped,
-        items: const [
-          BottomNavigationBarItem(
+        items: [
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Characters',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: BlocBuilder<FavoriteListCubit, Map<String, Character?>>(
+                builder: (context, favorites) {
+              return Stack(
+                alignment: Alignment.center,
+                children: [
+                  const Icon(Icons.favorite),
+                  Text(
+                    favorites.length.toString(),
+                    style: const TextStyle(color: Colors.white, fontSize: 11),
+                  )
+                ],
+              );
+            }),
             label: 'Wishlist',
           ),
         ],
