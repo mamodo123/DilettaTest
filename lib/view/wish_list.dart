@@ -46,42 +46,40 @@ class _WishListState extends State<WishList> {
                 ? const Center(
                     child: Text('Your Wishlist is empty!'),
                   )
-                : Expanded(
-                    child: ListView.builder(
-                      itemBuilder: (context, index) {
-                        final character = filteredList[index];
-                        return character == null
-                            ? Card(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)),
-                                elevation: 5,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        blurRadius: 8,
-                                        offset: const Offset(0, 4),
-                                      ),
-                                    ],
+                : ListView.builder(
+                  itemBuilder: (context, index) {
+                    final character = filteredList[index];
+                    return character == null
+                        ? Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            elevation: 5,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    blurRadius: 8,
+                                    offset: const Offset(0, 4),
                                   ),
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(12.0),
-                                    child: SizedBox(
-                                      height: 80,
-                                      child: Center(
-                                        child: CircularProgressIndicator(),
-                                      ),
-                                    ),
+                                ],
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.all(12.0),
+                                child: SizedBox(
+                                  height: 80,
+                                  child: Center(
+                                    child: CircularProgressIndicator(),
                                   ),
                                 ),
-                              )
-                            : CharacterListItem(character, true);
-                      },
-                      itemCount: filteredList.length,
-                    ),
-                  ),
+                              ),
+                            ),
+                          )
+                        : CharacterListItem(character, true);
+                  },
+                  itemCount: filteredList.length,
+                ),
           ),
         ],
       );

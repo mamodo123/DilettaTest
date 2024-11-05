@@ -54,14 +54,15 @@ class _BufferListState extends State<BufferList> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadInitialData(context);
-    });
 
-    _scrollController.addListener(() {
-      if (_scrollController.position.pixels ==
-              _scrollController.position.maxScrollExtent &&
-          !_loading) {
-        loadPage();
-      }
+      final height = MediaQuery.of(context).size.height;
+      _scrollController.addListener(() {
+        if (_scrollController.position.pixels >=
+                _scrollController.position.maxScrollExtent - height &&
+            !_loading) {
+          loadPage();
+        }
+      });
     });
   }
 
@@ -95,13 +96,15 @@ class _BufferListState extends State<BufferList> {
                   ),
                 ),
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (state.characters.isNotEmpty)
-                        Expanded(
-                          child: ListView.builder(
-                            controller: _scrollController,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (state.characters.isNotEmpty)
+                          ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
                             itemCount: state.characters.length,
                             itemBuilder: (context, index) {
                               final character = state.characters[index];
@@ -110,16 +113,22 @@ class _BufferListState extends State<BufferList> {
                               return CharacterListItem(character, favorite);
                             },
                           ),
-                        ),
-                      if (state.status == CharacterStatus.loading)
-                        const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      if (state.message != null)
-                        Center(
-                          child: Text(state.message!),
-                        ),
-                    ],
+                        if (state.status == CharacterStatus.loading)
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                        if (state.message != null)
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Center(
+                              child: Text(state.message!),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 )
               ],

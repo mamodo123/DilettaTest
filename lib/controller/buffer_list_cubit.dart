@@ -47,10 +47,10 @@ class BufferListCubit extends Cubit<CharacterState> {
             } else {
               nextPage = Info.extractPage(response.info.next!);
             }
-            emit(state.copyWith(
-              status: CharacterStatus.loaded,
-              characters: [...state.characters, ...response.results!],
-            ));
+            emit(CharacterState(
+                status: CharacterStatus.loaded,
+                characters: [...state.characters, ...response.results!],
+                message: null));
             return state;
           }
         } on NoItemsFoundException catch (error) {
