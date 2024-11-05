@@ -146,7 +146,7 @@ class CharacterListItem extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text('Could not add to Wishlist  '),
-                          duration: Duration(seconds: 2), // Duração da Snackbar
+                          duration: Duration(seconds: 2),
                         ),
                       );
                     });

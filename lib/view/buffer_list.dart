@@ -40,7 +40,7 @@ class _BufferListState extends State<BufferList> {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Could not load Wishlist'),
-                duration: Duration(seconds: 2), // Duração da Snackbar
+                duration: Duration(seconds: 2),
               ),
             );
           });
