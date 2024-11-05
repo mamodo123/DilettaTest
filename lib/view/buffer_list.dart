@@ -1,6 +1,7 @@
 import 'package:dilleta_test/controller/favorite_list_cubit.dart';
 import 'package:dilleta_test/model/character.dart';
 import 'package:dilleta_test/view/widgets/character_list_item.dart';
+import 'package:dilleta_test/view/widgets/delayed_submit_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,12 +17,14 @@ class BufferList extends StatefulWidget {
 
 class _BufferListState extends State<BufferList> {
   var _loading = false;
-  final ScrollController _scrollController = ScrollController();
+  late final ScrollController _scrollController;
 
-  Future<void> loadPage() async {
+  Future<void> loadPage({String? filter, bool reload = false}) async {
     _loading = true;
     try {
-      await context.read<BufferListCubit>().loadPage();
+      await context
+          .read<BufferListCubit>()
+          .loadPage(filter: filter, reload: reload);
     } finally {
       _loading = false;
     }
@@ -47,6 +50,8 @@ class _BufferListState extends State<BufferList> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadInitialData(context);
     });
@@ -80,27 +85,43 @@ class _BufferListState extends State<BufferList> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (state.characters.isNotEmpty)
-                  Expanded(
-                    child: ListView.builder(
-                      controller: _scrollController,
-                      itemCount: state.characters.length,
-                      itemBuilder: (context, index) {
-                        final character = state.characters[index];
-                        final favorite =
-                            favorites.containsKey(character.id.toString());
-                        return CharacterListItem(character, favorite);
-                      },
-                    ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                  child: DelayedSubmitTextField(
+                    onSubmit: (text) {
+                      loadPage(filter: text, reload: true);
+                    },
                   ),
-                if (state.status == CharacterStatus.loading)
-                  const Center(
-                    child: CircularProgressIndicator(),
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (state.characters.isNotEmpty)
+                        Expanded(
+                          child: ListView.builder(
+                            controller: _scrollController,
+                            itemCount: state.characters.length,
+                            itemBuilder: (context, index) {
+                              final character = state.characters[index];
+                              final favorite = favorites
+                                  .containsKey(character.id.toString());
+                              return CharacterListItem(character, favorite);
+                            },
+                          ),
+                        ),
+                      if (state.status == CharacterStatus.loading)
+                        const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      if (state.message != null)
+                        Center(
+                          child: Text(state.message!),
+                        ),
+                    ],
                   ),
-                if (state.message != null)
-                  Center(
-                    child: Text(state.message!),
-                  ),
+                )
               ],
             );
           }

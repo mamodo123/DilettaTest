@@ -5,12 +5,18 @@ import 'package:http/http.dart' as http;
 
 import '../../model/api.dart';
 import '../consts/api.dart' as api_urls;
+import '../exceptions.dart';
 
-Future<ApiListResponse> fetchCharactersFromPage({int page = 1}) async {
+Future<ApiListResponse> fetchCharactersFromPage(
+    {int page = 1, String? filter}) async {
+  final payload = {'page': page.toString()};
+  if (filter != null) {
+    payload['name'] = filter;
+  }
   final url = Uri.https(
     api_urls.url,
     api_urls.endpoint,
-    {'page': page.toString()},
+    payload,
   );
 
   try {
@@ -20,6 +26,9 @@ Future<ApiListResponse> fetchCharactersFromPage({int page = 1}) async {
       final Map<String, dynamic> json = jsonDecode(response.body);
       return ApiListResponse.fromJson(json: json, url: url.toString());
     } else {
+      if (response.body.contains('There is nothing here')) {
+        return Future.error(NoItemsFoundException('No items found'));
+      }
       throw Exception(response.statusCode);
     }
   } catch (e) {
